@@ -3,7 +3,7 @@
 
 ### Clone the repository
 ```bash
-git clone https://github.com/reganputra/api-concert.git
+git clone https://github.com/reganputra/backend-api-concert.git
 ```
 ### Install dependecies
 ```bash
