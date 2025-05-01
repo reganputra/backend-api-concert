@@ -12,7 +12,7 @@ const getConcerts = async (req, res) => {
 const getConcertById = async (req, res) => {
     try {
         const concert = await prisma.concert.findUnique({
-            where: { id: parseInt(req.params.id) }
+            where: { id: req.params.id }
         });
 
         if (!concert) {
@@ -56,7 +56,7 @@ const updateConcert = async (req, res) => {
 
         // Check if concert exists
         const concertExists = await prisma.concert.findUnique({
-            where: { id: parseInt(req.params.id) }
+            where: { id: req.params.id }
         });
 
         if (!concertExists) {
@@ -65,7 +65,7 @@ const updateConcert = async (req, res) => {
 
         // Update concert
         const updatedConcert = await prisma.concert.update({
-            where: { id: parseInt(req.params.id) },
+            where: { id: req.params.id },
             data: {
                 title: title || concertExists.title,
                 artist: artist || concertExists.artist,
@@ -88,7 +88,7 @@ const deleteConcert = async (req, res) => {
     try {
         // Check if concert exists
         const concertExists = await prisma.concert.findUnique({
-            where: { id: parseInt(req.params.id) }
+            where: { id: req.params.id }
         });
 
         if (!concertExists) {
@@ -97,7 +97,7 @@ const deleteConcert = async (req, res) => {
 
         // Delete concert
         await prisma.concert.delete({
-            where: { id: parseInt(req.params.id) }
+            where: { id: req.params.id }
         });
 
         res.json({ message: 'Konser berhasil dihapus', data: concertExists });

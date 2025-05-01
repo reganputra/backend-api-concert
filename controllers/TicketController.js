@@ -6,7 +6,7 @@ const createTicket = async (req, res) => {
 
         // Check if concert exists
         const concert = await prisma.concert.findUnique({
-            where: { id: parseInt(concertId) }
+            where: { id: req.body.concertId }
         });
 
         if (!concert) {
@@ -25,7 +25,7 @@ const createTicket = async (req, res) => {
             // Create ticket
             const ticket = await prisma.ticket.create({
                 data: {
-                    concertId: parseInt(concertId),
+                    concertId: concertId,
                     userId: req.user.id,
                     quantity: parseInt(quantity),
                     totalPrice,
@@ -35,7 +35,7 @@ const createTicket = async (req, res) => {
 
             // Update available seats
             await prisma.concert.update({
-                where: { id: parseInt(concertId) },
+                where: { id: concertId },
                 data: { availableSeats: concert.availableSeats - quantity }
             });
 
@@ -51,7 +51,7 @@ const createTicket = async (req, res) => {
 const getTicketById = async (req, res) => {
     try {
         const ticket = await prisma.ticket.findUnique({
-            where: { id: parseInt(req.params.id) },
+            where: { id: req.params.id },
             include: {
                 concert: true,
                 user: {
@@ -98,7 +98,7 @@ const updateTicketToPaid = async (req, res) => {
 
         // Check if ticket exists
         const ticket = await prisma.ticket.findUnique({
-            where: { id: parseInt(req.params.id) }
+            where: { id: req.params.id }
         });
 
         if (!ticket) {
@@ -112,7 +112,7 @@ const updateTicketToPaid = async (req, res) => {
 
         // Update ticket
         const updatedTicket = await prisma.ticket.update({
-            where: { id: parseInt(req.params.id) },
+            where: { id: req.params.id },
             data: {
                 status: 'paid',
                 paymentId,
@@ -130,7 +130,7 @@ const cancelTicket = async (req, res) => {
     try {
         // Check if ticket exists
         const ticket = await prisma.ticket.findUnique({
-            where: { id: parseInt(req.params.id) }
+            where: { id: req.params.id }
         });
 
         if (!ticket) {
@@ -150,7 +150,7 @@ const cancelTicket = async (req, res) => {
         const result = await prisma.$transaction(async (prisma) => {
             // Update ticket
             const updatedTicket = await prisma.ticket.update({
-                where: { id: parseInt(req.params.id) },
+                where: { id: req.params.id },
                 data: { status: 'cancelled' }
             });
 
