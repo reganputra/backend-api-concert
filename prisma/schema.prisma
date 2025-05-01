@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  isAdmin   Boolean  @default(false)
+  phone     String?
+  createdAt DateTime @default(now())
+  tickets   Ticket[]
+
+  @@map("user")
+}
+
+model Concert {
+  id             String   @id @default(uuid())
+  title          String
+  artist         String
+  date           DateTime
+  venue          String
+  totalSeats     Int
+  availableSeats Int
+  ticketPrice    Decimal  @db.Decimal(10, 2)
+  image          String?
+  description    String?
+  categories     String[]
+  createdAt      DateTime @default(now())
+  tickets        Ticket[]
+
+  @@map("concert")
+}
+
+model Ticket {
+  id            String   @id @default(uuid())
+  concert       Concert  @relation(fields: [concertId], references: [id])
+  concertId     String
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  quantity      Int      @default(1)
+  totalPrice    Decimal  @db.Decimal(10, 2)
+  status        String   @default("reserved")
+  paymentId     String?
+  purchaseDate  DateTime @default(now())
+  seatNumbers   String[]
+  transactionId String?
+
+  @@map("ticket")
+}
