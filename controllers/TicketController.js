@@ -13,7 +13,7 @@ const createTicket = async (req, res) => {
             return res.status(404).json({ message: 'Konser tidak ditemukan' });
         }
 
-        // Check if enough tickets available
+        // Check if there is enough tickets available
         if (concert.availableSeats < quantity) {
             return res.status(400).json({ message: 'Tiket tidak tersedia' });
         }
@@ -33,7 +33,7 @@ const createTicket = async (req, res) => {
                 }
             });
 
-            // Update available seats
+            // Update current available seats after creating ticket
             await prisma.concert.update({
                 where: { id: concertId },
                 data: { availableSeats: concert.availableSeats - quantity }

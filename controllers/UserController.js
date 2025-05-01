@@ -115,7 +115,7 @@ const updateUserProfile = async (req, res) => {
             return res.status(404).json({ message: 'User tidak ditemukan' });
         }
 
-        // Prepare update data
+        // Prepare to update data
         const updateData = {
             name: name || user.name,
             email: email || user.email,
