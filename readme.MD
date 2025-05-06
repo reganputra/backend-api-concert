@@ -15,7 +15,7 @@ npm install
 npx prisma init
 ``````
 
-### Databae migrations
+### Database migrations
 ```bash
 npx prisma migrate dev --name <migration_name>
 ````
